@@ -1,0 +1,12 @@
+edu.imut.commons
+edu.imut.dao
+edu.imut.dao.impl
+edu.imut.domain
+edu.imut.exception
+edu.imut.filter
+edu.imut.service
+edu.imut.service.impl
+edu.imut.test
+edu.imut.util
+edu.imut.web.beans
+edu.imut.web.controller
