@@ -20,7 +20,7 @@
     <br/>
     <a href="${pageContext.request.contextPath}">首页</a>
     <a href="${pageContext.request.contextPath}">登录</a>
-    <a href="${pageContext.request.contextPath}">免费注册</a>
+    <a href="${pageContext.request.contextPath}/regist.jsp">免费注册</a>
     <a href="${pageContext.request.contextPath}">我的订单</a>
     <a href="${pageContext.request.contextPath}/showCart.jsp">购物车</a>
     <br/>

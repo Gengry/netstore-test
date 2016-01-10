@@ -5,6 +5,7 @@ import java.util.List;
 import edu.imut.commons.Page;
 import edu.imut.domain.Book;
 import edu.imut.domain.Category;
+import edu.imut.domain.Customer;
 
 public interface BusinessService {
 	/**
@@ -45,4 +46,10 @@ public interface BusinessService {
 	 * @return
 	 */
 	Book findBookById(String bookId);
+	/**
+	 * ÓÃ»§×¢²á
+	 * @param customer
+	 */
+	void registCustomer(Customer customer);
+	
 }

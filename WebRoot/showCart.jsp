@@ -21,33 +21,47 @@
 				<td>${me.value.book.name}</td>
 				<td>${me.value.book.price}</td>
 				<td><input type="text" name="quantity" id="quantity"
-					value="${me.value.quantity}" onchange="changeNum(this,'${me.key}')">
+					value="${me.value.quantity}"
+					onchange="changeNum(this,'${me.key}','${me.value.quantity}')">
 				</td>
 				<td>${me.value.totalprice}</td>
-				<td><a href="">删除</a>
+				<td><a href="javascript:delOneItem('${me.key}')">删除</a>
 				</td>
 			</tr>
 		</c:forEach>
 		<tr>
-    			<td colspan="6">
-    				共${sessionScope.cart.totalQuantity}件商品,付款金额：${sessionScope.cart.amount}
-    				<a href="">去收银台</a>
-    			</td>
-    		</tr>
+			<td colspan="6">
+				共${sessionScope.cart.totalQuantity}件商品,付款金额：${sessionScope.cart.amount}
+				<a href="">去收银台</a>
+			</td>
+		</tr>
 	</table>
 </c:if>
 </body>
 <script type="text/javascript">
-	function changeNum(inputObj,bookId){
+	function delOneItem(bookId) {
+		var num = window.confirm("确定删除该项?");
+		if (num) {
+			window.location.href = "${pageContext.request.contextPath}/servlet/ClientServlet?op=delOneItem&bookId="+bookId;
+		}
+	}
+	function changeNum(inputObj, bookId, oldNum) {
+		//验证用户的输入
 		var num = inputObj.value;
-		if(!/^[1-9][0-9]*$/.test(num)){
+
+		if (!/^[1-9][0-9]*$/.test(num)) {
 			alert("请输入正确的数量");
 			return;
 		}
-		var sure = window.confirm("确定要修改吗？");
-		if(sure){
-			window.location.href="";
-		} 
+
+		var sure = window.confirm("确定要修改数量吗?");
+		if (sure) {
+			window.location.href = "${pageContext.request.contextPath}/servlet/ClientServlet?op=changeNum&bookId="
+					+ bookId + "&num=" + num;
+		} else {
+			//把input的值改为原来的
+			inputObj.value = oldNum;
+		}
 	}
 </script>
 </html>

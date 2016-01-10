@@ -18,3 +18,13 @@ create table books(
 	constraint category_id_fk foreign key (categoryId) references categorys(id)
 );
 
+create table customer(
+	id varchar(100) primary key,
+	name varchar(100) not null unique,
+	password varchar(100) not null,
+	phone varchar(11) not null,
+	address varchar(255)not null,
+	email varchar(100) not null,
+	actived bit(1),
+	code varchar(100) not null unique
+);

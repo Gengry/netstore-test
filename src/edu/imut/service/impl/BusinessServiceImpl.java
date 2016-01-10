@@ -6,16 +6,20 @@ import java.util.UUID;
 import edu.imut.commons.Page;
 import edu.imut.dao.BookDao;
 import edu.imut.dao.CategoryDao;
+import edu.imut.dao.CustomerDao;
 import edu.imut.dao.impl.BookDaoImpl;
 import edu.imut.dao.impl.CategoryDaoImpl;
+import edu.imut.dao.impl.CustomerDaoImpl;
 import edu.imut.domain.Book;
 import edu.imut.domain.Category;
+import edu.imut.domain.Customer;
 import edu.imut.service.BusinessService;
 
 public class BusinessServiceImpl implements BusinessService {
 
 	private CategoryDao categoryDao = new CategoryDaoImpl();
 	private BookDao bookDao = new BookDaoImpl();
+	private CustomerDao customerDao = new CustomerDaoImpl();
 	public void addCategory(Category category) {
 		category.setId(UUID.randomUUID().toString());
 		categoryDao.save(category);
@@ -61,6 +65,11 @@ public class BusinessServiceImpl implements BusinessService {
 		Page page = new Page(currentPageNum,totalRecords);
 		page.setRecords(bookDao.findPageBooks(page.getStartIndex(), page.getPageSize(),categoryId));
 		return page;
+	}
+
+	public void registCustomer(Customer customer) {
+		customer.setId(UUID.randomUUID().toString());
+		customerDao.save(customer);
 	}
 
 }
