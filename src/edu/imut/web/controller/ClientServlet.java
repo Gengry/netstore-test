@@ -17,7 +17,7 @@ import edu.imut.domain.Customer;
 import edu.imut.service.BusinessService;
 import edu.imut.service.impl.BusinessServiceImpl;
 import edu.imut.util.FillBeanUtil;
-import edu.imut.utilu.SendMail;
+import edu.imut.util.SendMail;
 import edu.imut.web.beans.Cart;
 
 public class ClientServlet extends HttpServlet {
@@ -38,49 +38,100 @@ public class ClientServlet extends HttpServlet {
 			showBookDetails(request, response);
 		} else if ("buyBook".equals(op)) {
 			buyBook(request, response);
-		}else if("changeNum".equals(op)){
-			changeNum(request,response);
-		}else if("delOneItem".equals(op)){
-			delOneItem(request,response);
-		}else if("registCustomer".equals(op)){
-			registCustomer(request,response);
+		} else if ("changeNum".equals(op)) {
+			changeNum(request, response);
+		} else if ("delOneItem".equals(op)) {
+			delOneItem(request, response);
+		} else if ("registCustomer".equals(op)) {
+			registCustomer(request, response);
+		} else if ("active".equals(op)) {
+			active(request, response);
+		} else if ("login".equals(op)) {
+			login(request, response);
+		}else if("logout".equals(op)){
+			logout(request,response);
 		}
 	}
-	//用户注册
-	private void registCustomer(HttpServletRequest request,
-			HttpServletResponse response) {
-		Customer customer = FillBeanUtil.fillBean(request, Customer.class);
-		//产生唯一激活码
-		customer.setCode(UUID.randomUUID().toString());
-		service.registCustomer(customer);
-		//发送激活邮件，需要时间：多线程
-		SendMail sm = new SendMail(customer);
+	//用户注销
+	private void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		request.getSession().removeAttribute("customer");
+		response.sendRedirect(request.getContextPath());
 	}
 
-	//删除购物项
+	// 客户登录
+	private void login(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		String name = request.getParameter("name");
+		String password = request.getParameter("password");
+		Customer customer = service.login(name, password);
+		if (customer == null) {
+			request.setAttribute("msg", "用户名或密码错误！");
+			request.getRequestDispatcher("/message.jsp").forward(request,
+					response);
+		} else {
+			HttpSession session = request.getSession();
+			session.setAttribute("customer", customer);
+			response.sendRedirect(request.getContextPath());
+		}
+	}
+
+	// 激活账户
+	private void active(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String code = request.getParameter("code");
+		if (code != null && !"".equals(code)) {
+			service.activeCustomer(code);
+			request.setAttribute("msg", "激活成功！");
+			request.getRequestDispatcher("/message.jsp").forward(request,
+					response);
+		} else {
+			request.setAttribute("msg", "注册码有误！");
+			request.getRequestDispatcher("/message.jsp").forward(request,
+					response);
+		}
+	}
+
+	// 用户注册
+	private void registCustomer(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		Customer customer = FillBeanUtil.fillBean(request, Customer.class);
+		// 产生唯一激活码
+		customer.setCode(UUID.randomUUID().toString());
+		service.registCustomer(customer);
+		// 发送激活邮件，需要时间：多线程
+		SendMail sm = new SendMail(customer);
+		sm.start();
+		request.setAttribute("msg",
+				"注册成功！我们已经发送了一封激活邮件到您的" + customer.getEmail() + "邮箱中，请及时激活您的账户");
+		request.getRequestDispatcher("/message.jsp").forward(request, response);
+	}
+
+	// 删除购物项
 	private void delOneItem(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException{
+			HttpServletResponse response) throws ServletException, IOException {
 		String bookId = request.getParameter("bookId");
 		HttpSession session = request.getSession();
 		Cart cart = (Cart) session.getAttribute("cart");
 		cart.getItems().remove(bookId);
-		request.getRequestDispatcher("/showCart.jsp").forward(request, response);
+		request.getRequestDispatcher("/showCart.jsp")
+				.forward(request, response);
 	}
 
-	//改变购物车book数量
+	// 改变购物车book数量
 	private void changeNum(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException{
+			HttpServletResponse response) throws ServletException, IOException {
 		String bookId = request.getParameter("bookId");
 		String num = request.getParameter("num");
 		HttpSession session = request.getSession();
 		Cart cart = (Cart) session.getAttribute("cart");
 		cart.getItems().get(bookId).setQuantity(Integer.parseInt(num));
-		request.getRequestDispatcher("/showCart.jsp").forward(request, response);
+		request.getRequestDispatcher("/showCart.jsp")
+				.forward(request, response);
 	}
 
 	// 添加图书到购物车
 	private void buyBook(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException{
+			HttpServletResponse response) throws ServletException, IOException {
 		String bookId = request.getParameter("bookId");
 		Book book = service.findBookById(bookId);
 		// 放入购物车
@@ -91,7 +142,8 @@ public class ClientServlet extends HttpServlet {
 			session.setAttribute("cart", cart);
 		}
 		cart.addBook(book);
-		request.setAttribute("msg", "<a href='"+request.getContextPath()+"'>书籍已经放入购物车，继续购物</a>");
+		request.setAttribute("msg", "<a href='" + request.getContextPath()
+				+ "'>书籍已经放入购物车，继续购物</a>");
 		request.getRequestDispatcher("/message.jsp").forward(request, response);
 
 	}

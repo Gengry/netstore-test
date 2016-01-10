@@ -72,4 +72,19 @@ public class BusinessServiceImpl implements BusinessService {
 		customerDao.save(customer);
 	}
 
+	public void activeCustomer(String code) {
+		Customer customer = customerDao.findByCode(code);
+		customer.setActived(true);
+		customerDao.update(customer);
+	}
+
+	public Customer login(String name, String password) {
+		Customer c = customerDao.fingCustomer(name,password);
+		if(c==null)
+			return null;
+		if(!c.isActived())
+			return null;
+		return c;
+	}
+
 }

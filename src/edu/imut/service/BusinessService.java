@@ -51,5 +51,16 @@ public interface BusinessService {
 	 * @param customer
 	 */
 	void registCustomer(Customer customer);
-	
+	/**
+	 * 用户激活
+	 * @param code 激活码
+	 */
+	void activeCustomer(String code);
+	/**
+	 * 用户登录
+	 * @param name
+	 * @param password
+	 * @return
+	 */
+	Customer login(String name, String password);
 }

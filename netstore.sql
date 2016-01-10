@@ -28,3 +28,10 @@ create table customer(
 	actived bit(1),
 	code varchar(100) not null unique
 );
+
+create table orders(
+
+);
+create table orderitems(
+	
+);
