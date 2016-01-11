@@ -32,7 +32,7 @@
 		<tr>
 			<td colspan="6">
 				共${sessionScope.cart.totalQuantity}件商品,付款金额：${sessionScope.cart.amount}
-				<a href="">去收银台</a>
+				<a href="${pageContext.request.contextPath}/servlet/ClientServlet?op=genOrders">去收银台</a>
 			</td>
 		</tr>
 	</table>

@@ -30,8 +30,39 @@ create table customer(
 );
 
 create table orders(
+	id VARCHAR(100) primary key,
+	orderNum VARCHAR(100) NOT NULL UNIQUE,
+	quantity int,
+	amount float(10,2),
+	status int,
+	customerId varchar(100),
+	constraint customer_id_fk foreign key (customerId) references customer(id)
+);
+create table orders_item(
+	id varchar(100) primary key,
+	quantity int,
+	price float(10,2),
+	booksId varchar(100),
+	ordersId varchar(100),
+	constraint books_id_fk foreign key (booksId) references books(id),
+	constraint orders_id_fk foreign key (ordersId) references orders(id)
+);
 
-);
-create table orderitems(
-	
-);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

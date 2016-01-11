@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class OrderItem implements Serializable {
 	private String id;
-	private String quantity;
+	private int quantity;
 	private float price;
 	private Book book;
 	public String getId() {
@@ -13,10 +13,10 @@ public class OrderItem implements Serializable {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getQuantity() {
+	public int getQuantity() {
 		return quantity;
 	}
-	public void setQuantity(String quantity) {
+	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
 	public float getPrice() {

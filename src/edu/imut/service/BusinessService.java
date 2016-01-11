@@ -6,6 +6,7 @@ import edu.imut.commons.Page;
 import edu.imut.domain.Book;
 import edu.imut.domain.Category;
 import edu.imut.domain.Customer;
+import edu.imut.domain.Order;
 
 public interface BusinessService {
 	/**
@@ -63,4 +64,34 @@ public interface BusinessService {
 	 * @return
 	 */
 	Customer login(String name, String password);
+	/**
+	 * 生成订单
+	 * @param order
+	 */
+	void genOrder(Order order);
+	
+	/**
+	 * 更新订单
+	 * @param order
+	 */
+	void updateOrder(Order order);
+	
+	/**
+	 * 通过ID查询订单
+	 * @param orderId
+	 * @return
+	 */
+	Order findOrderById(String orderId);
+	/**
+	 * 通过订单号查询订单
+	 * @param orderNum
+	 * @return
+	 */
+	Order findOrderByOrderNum(String orderNum);
+	/**
+	 * 通过客户id查询客户的所有订单
+	 * @param CustomerId
+	 * @return
+	 */
+	List<Order> findOrdersByCustomer(Customer customer);
 }
